@@ -2,6 +2,59 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+# 1. Configuración General (Debe ser siempre el primer comando)
+st.set_page_config(page_title="Portal Operativo y de Mercado", layout="wide", page_icon="📊")
+
+# ==========================================
+# 2. SISTEMA DE LOGIN
+# ==========================================
+def check_password():
+    """Valida el usuario y contraseña."""
+    def password_entered():
+        # Verifica si el usuario existe y si la contraseña coincide
+        if (st.session_state["username"] in st.secrets["passwords"] and 
+            st.session_state["password"] == st.secrets["passwords"][st.session_state["username"]]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Borra la contraseña de la memoria por seguridad
+        else:
+            st.session_state["password_correct"] = False
+
+    # Pantalla de inicio de sesión (Si aún no se ha validado)
+    if "password_correct" not in st.session_state:
+        st.title("🔒 Acceso al Portal Operativo")
+        st.text_input("Usuario", key="username")
+        st.text_input("Contraseña", type="password", key="password")
+        st.button("Iniciar sesión", on_click=password_entered)
+        # Aquí está tu mensaje personalizado
+        st.info("¿No tienes cuenta? Solicita tu acceso con el administrador.")
+        return False
+    
+    # Pantalla de error (Si la contraseña fue incorrecta)
+    elif not st.session_state["password_correct"]:
+        st.title("🔒 Acceso al Portal Operativo")
+        st.text_input("Usuario", key="username")
+        st.text_input("Contraseña", type="password", key="password")
+        st.button("Iniciar sesión", on_click=password_entered)
+        st.error("❌ Usuario o contraseña incorrectos.")
+        st.info("¿No tienes cuenta? Solicita tu acceso con el administrador.")
+        return False
+    
+    # Si todo es correcto
+    return True
+
+# ==========================================
+# 3. CÓDIGO PRINCIPAL DEL PORTAL (Solo se ejecuta si hay login)
+# ==========================================
+if check_password():
+    # Mensaje de bienvenida en la barra lateral
+    st.sidebar.success(f"👤 Sesión iniciada: **{st.session_state['username']}**")
+    
+    # Botón para cerrar sesión
+    if st.sidebar.button("Cerrar sesión"):
+        del st.session_state["password_correct"]
+        del st.session_state["username"]
+        st.rerun() # Recarga la página para mostrar el login de nuevo
+
 # 1. Configuración General de la Página
 st.set_page_config(page_title="Portal Operativo y de Mercado", layout="wide", page_icon="📊")
 
@@ -59,7 +112,7 @@ if colonia:
 # ==========================================
 # 4. ÁREA PRINCIPAL - KPIs (Indicadores Clave)
 # ==========================================
-st.title("📡 Panel de Indicadores Operativos por Colonia")
+st.title("📡 Panel de Indicadores por Colonia")
 st.markdown("Visión ejecutiva de infraestructura, mercado y competencia.")
 st.markdown("---")
 
