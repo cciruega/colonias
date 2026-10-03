@@ -37,13 +37,19 @@ estado = st.sidebar.multiselect("Estado", options=estados_disp)
 if estado:
     df = df[df['Estado'].isin(estado)]
 
-# Filtro 3: Municipio (Depende del Estado)
+# Filtro 3: Zona (Depende del Área)
+estados_disp = sorted(df['Zona'].dropna().unique())
+estado = st.sidebar.multiselect("Zona", options=zona_disp)
+if estado:
+    df = df[df['Zona'].isin(zona)]
+
+# Filtro 4: Municipio (Depende del Estado)
 municipios_disp = sorted(df['Municipio'].dropna().unique())
 municipio = st.sidebar.multiselect("Municipio", options=municipios_disp)
 if municipio:
     df = df[df['Municipio'].isin(municipio)]
 
-# Filtro 4: Colonia C (Depende del Municipio)
+# Filtro 5: Colonia C (Depende del Municipio)
 colonias_disp = sorted(df['Colonia C'].dropna().unique())
 colonia = st.sidebar.multiselect("Colonia C", options=colonias_disp)
 if colonia:
