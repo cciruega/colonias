@@ -14,6 +14,8 @@ def check_password():
         if (st.session_state["username"] in st.secrets["passwords"] and 
             st.session_state["password"] == st.secrets["passwords"][st.session_state["username"]]):
             st.session_state["password_correct"] = True
+            # Agrega esta línea para guardar el usuario de forma permanente:
+            st.session_state["usuario_actual"] = st.session_state["username"]
             del st.session_state["password"]
         else:
             st.session_state["password_correct"] = False
@@ -39,13 +41,13 @@ def check_password():
 # 3. CÓDIGO PRINCIPAL DEL PORTAL (Todo esto va IDENTADO hacia la derecha)
 # ==========================================
 if check_password():
-    # Mensaje de bienvenida en la barra lateral
-    st.sidebar.success(f"👤 Sesión iniciada: **{st.session_state['username']}**")
+    # Usamos la variable segura "usuario_actual" en lugar de "username"
+    st.sidebar.success(f"👤 Sesión iniciada: **{st.session_state['usuario_actual']}**")
     
     # Botón para cerrar sesión
     if st.sidebar.button("Cerrar sesión"):
         del st.session_state["password_correct"]
-        del st.session_state["username"]
+        del st.session_state["usuario_actual"] # Borramos la variable segura al salir
         st.rerun()
 
     # --- A PARTIR DE AQUÍ TODO LLEVA UNA TABULACIÓN (ESPACIOS) ---
