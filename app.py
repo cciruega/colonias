@@ -38,9 +38,9 @@ if estado:
     df = df[df['Estado'].isin(estado)]
 
 # Filtro 3: Zona (Depende del Área)
-estados_disp = sorted(df['Zona'].dropna().unique())
-estado = st.sidebar.multiselect("Zona", options=zona_disp)
-if estado:
+zona_disp = sorted(df['Zona'].dropna().unique())
+zona = st.sidebar.multiselect("Zona", options=zona_disp)
+if zona:
     df = df[df['Zona'].isin(zona)]
 
 # Filtro 4: Municipio (Depende del Estado)
