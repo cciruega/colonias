@@ -55,9 +55,6 @@ if check_password():
         del st.session_state["username"]
         st.rerun() # Recarga la página para mostrar el login de nuevo
 
-# 1. Configuración General de la Página
-st.set_page_config(page_title="Portal Operativo y de Mercado", layout="wide", page_icon="📊")
-
 # 2. Carga de Datos (Cacheada para rendimiento)
 @st.cache_data
 def load_data():
